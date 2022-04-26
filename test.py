@@ -12,7 +12,7 @@ COUNT = 20 # number of points to sample in each circle
 ZOOM = 30 # how many pixels to draw on each side when zoomed in
 SHOW_ALL = False # whether to draw the whole space, or a specific point
 
-HEIGHT = 0.5 # height cables are allowed off ground
+HEIGHT = 1 # height cables are allowed off ground
 
 START = np.array([200, 1600]) # [x y]
 END = np.array([3000, 1600])
@@ -107,7 +107,7 @@ if __name__ == "__main__":
 	if SHOW_ALL:
 		draw_data(data)
 	else:
-		point = END
+		point = START
 
 		interp = interpolate(data)
 		safe_x, safe_y = circ_check(interp, point)
