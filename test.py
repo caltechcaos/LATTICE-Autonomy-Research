@@ -5,16 +5,17 @@ from PIL import Image
 
 DATA_STR = 'Site04_final_adj_5mpp_surf.tif'
 ORIGIN = 'lower'
-START_END_COL = 'black'
-POINT_COL = 'red'
+POINT_COL = 'black'
 
 CABLE_LEN = 20 # length of the cable in pixels
 COUNT = 20 # number of points to sample in each circle
+ZOOM = 30 # how many pixels to draw on each side when zoomed in
+SHOW_ALL = False # whether to draw the whole space, or a specific point
 
-HEIGHT = 0.5
+HEIGHT = 0.5 # height cables are allowed off ground
 
 START = np.array([200, 1600]) # [x y]
-END = np.array([200, 3000])
+END = np.array([3000, 1600])
 
 # loads and parses the data
 def get_data(data_str):
@@ -26,22 +27,25 @@ def draw_data(data):
 	plt.imshow(data, cmap='gray', origin=ORIGIN)
 	plt.colorbar()
 
-	plt.scatter(START[0], START[1], c=START_END_COL)
-	plt.scatter(END[0], END[1], c=START_END_COL)
+	draw_point(START)
+	draw_point(END)
 
 # draws a small area around the start
-def draw_start(data, sec):
-	# center
-	start_x = START[0]
-	start_y = START[1]
+def draw_zoom(data, center, sec):
+	center_x = center[0]
+	center_y = center[1]
 
 	# edges of the section to draw
-	edges = [start_x - sec, start_x + sec, start_y - sec, start_y + sec]
+	edges = [center_x - sec, center_x + sec, center_y - sec, center_y + sec]
 
 	plt.imshow(data[edges[0]:edges[1], edges[2]:edges[3]], 
 		extent=edges, cmap='gray', origin=ORIGIN)
 	plt.colorbar()
-	plt.scatter(start_x, start_y, c=START_END_COL)
+	draw_point(center)
+
+# draws a single point
+def draw_point(point):
+	plt.scatter(point[0], point[1], c=POINT_COL, linewidths=1, edgecolors='white')
 
 # returns the interpolated function of the data
 def interpolate(data):
@@ -86,20 +90,29 @@ def circ_check(interp, center):
 	diffs = slopes - approx
 	errs_all = diffs < 0
 	errs = np.sum(errs_all, -1)
-	safe = np.nonzero(errs == 0)[0]
 
 	sc = plt.scatter(x, y, c=diffs, linewidths=errs_all.flatten(), edgecolors='black')
 	plt.colorbar(sc)
 
-	return safe
+	# find points which are safe to pick up from
+	safe = np.nonzero(errs == 0)[0]
+	safe_x = x[safe, num - 1]
+	safe_y = y[safe, num - 1]
+
+	return safe_x, safe_y
 
 if __name__ == "__main__":
 	data = get_data(DATA_STR)
 
-	interp = interpolate(data)
-	safe = circ_check(interp, START)
-	print(safe)
+	if SHOW_ALL:
+		draw_data(data)
+	else:
+		point = END
 
-	draw_start(data, 30)
-	# draw_data(data)
+		interp = interpolate(data)
+		safe_x, safe_y = circ_check(interp, point)
+		print(safe_x, safe_y)
+
+		draw_zoom(data, point, ZOOM)
+
 	plt.show()
