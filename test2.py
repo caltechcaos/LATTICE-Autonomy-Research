@@ -214,7 +214,7 @@ for i in range(0, g_num):
         # indexs = np.abs((safe_x - cur_points[j][0]))>np.abs((safe_y- cur_points[j][1]))
 
 
-        indexs = (safe_x - cur_points[j][0])>5
+        indexs = (safe_x - cur_points[j][0])>10
         safe_y = safe_y[indexs]
         safe_x = safe_x[indexs]
         
