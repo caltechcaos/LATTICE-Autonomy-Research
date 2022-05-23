@@ -25,15 +25,15 @@ POINT_COL = 'black'
 CMAP = 'gnuplot'
 LINE_COL = 'white' #'#B22222'
 
-CABLE_LEN = 300/5 # length of the cable in pixels
+CABLE_LEN = 100/5 # length of the cable in pixels
 COUNT = 20 # number of points to sample in each circle
 ZOOM = 30 # how many pixels to draw on each side when zoomed in
 SHOW_ALL = False # whether to draw the whole space, or a specific point
 
 HEIGHT = 0.5 # height cables are allowed off ground
 
-END = np.array([200, 1600]) # [x y]
-START = np.array([3000, 1600])
+START = np.array([200, 1600]) # [x y]
+END = np.array([3000, 1600])
 
 BIG_NUMBER = 100000000000000
 
@@ -92,7 +92,7 @@ def line_to_gridpts(p1, p2):
 		points = np.vstack( (np.hstack((high, param)) , np.hstack((low, param))) )
 	else:
 		ratio = pt[1] / pt[0]
-		param = np.arange(0, int(np.ceil(np.abs(pt[0]))), 1, np.sign(pt[1]))[:,None]
+		param = np.arange(0, int(np.ceil(np.abs(pt[0]))), 1, np.sign(pt[0]))[:,None]
 		high = np.ceil(ratio*param)
 		low = np.floor(ratio*param)
 		points = np.vstack( (np.hstack((param, high)) , np.hstack((param, low))) )
@@ -183,7 +183,7 @@ class RRTAlgorithm(object):
 
 			plt.plot([nearest_neighbour[0], new_point[0]],
 			[nearest_neighbour[1], new_point[1]], color="gray")
-			plt.pause(0.001)
+			# plt.pause(0.001)
 
 		retNN = Points.search(current, BIG_NUMBER, None, None, None, None, None)
 		nde = retNN[2]
