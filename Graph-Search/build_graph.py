@@ -1,3 +1,4 @@
+from msilib import CAB
 import random, time, math
 from math import sqrt,cos,sin,atan2,pi
 from webbrowser import get
@@ -13,8 +14,8 @@ MAP_W, MAP_H = MAP.shape    # Width and Height of map   (pixels)
 pix2m = 5                   # Conversion factor         (m/pixel)
 
 # Now set the parameters of the LATTICE System
-CABLE_SPAN = 100/5             # Distance between stakes   (pixels)
-HEIGHT = 0.01                # Cable Heigth above ground (meters)
+CABLE_SPAN = 1000/5             # Distance between stakes   (pixels)
+HEIGHT = 0.1                # Cable Heigth above ground (meters)
 
 # Define functions for graph construction
 def add_height(points):
@@ -78,7 +79,7 @@ def line_to_gridpts(p1, p2):
     y1 = int(np.round(p1[1]))
     x2 = int(np.round(p2[0]))
     y2 = int(np.round(p2[1]))
-    rr, cc = line(x1, y1, x2, y2)
+    rr, cc = line(x1, y1, x2, y2) # TODO - Use line or line_aa ?
     return (rr, cc)
 
 def p4(p1, p2, p3):
@@ -145,7 +146,7 @@ if __name__ ==  '__main__':
     startTime = time.time() # For timing
     
     # Define the list of points to get the feasible neighbors from
-    X, Y = np.mgrid[0:3200:1, 1590:1610:1]
+    X, Y = np.mgrid[0:3200:1, 1596:1605:1]
     X = X.astype(int)
     Y = Y.astype(int)
     positions = np.hstack([X.ravel()[:,None], Y.ravel()[:,None]])
@@ -169,7 +170,13 @@ if __name__ ==  '__main__':
         for nghbr in r[i]:
             G.add_edge(pt, nghbr)
 
-    nx.write_gpickle(G,'0-3200_1598-1602.gpickle')
+    # for naming gpickle file
+    xmin, xmax = X.ravel()[0], X.ravel()[-1]
+    ymin, ymax = Y.ravel()[0], Y.ravel()[-1]
+    pickle_title = (str(xmin) + '-' + str(xmax) + '_' + str(ymin) + '-' +
+                    str(ymax) + '_' + str(CABLE_SPAN) + '_' + str(HEIGHT) + 
+                    '.gpickle')
+    nx.write_gpickle(G, pickle_title)
     
     print('Nodes:')
     print(G.number_of_nodes())
