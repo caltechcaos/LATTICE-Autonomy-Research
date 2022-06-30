@@ -16,14 +16,14 @@ const int SW_PIN = 3;      // the digital pin the switch is plugged into
 const int SERIAL_SPEED = 9600;  // bits per second, align with Tools -> Serial Monitor's dropdown menu
 const int DELAY = 50;           // milliseconds
 
-const float POT_ANALOG_MAX = 1023;        // max value of the potentiometer (min is assumed 0)
+const float POT_ANALOG_MAX = 1023;  // max value of the potentiometer (min is assumed 0)
 const float POT_MAX = 1;
 float pot_dead_zone;  // on the [-POT_MAX, POT_MAX] scale
 
 // Servo constants
 float servo_center;  // center position, in microseconds
-float servo_dev;      // how far the min/max are from the center, in microseconds
-float servo_step;      // the size of step taken by the Range test, in microseconds
+float servo_dev;     // how far the min/max are from the center, in microseconds
+float servo_step;    // the size of step taken by the Range test, in microseconds
 
 const char SPACER[] = "-----";
 
@@ -38,13 +38,13 @@ typedef enum state {
 	END
 } state_t;
 
-const char *MENU_OPTIONS[] = { "Menu", "Potentiometer", "Zero", "Range", "Settings", "Quit"};
+const char *MENU_OPTIONS[] = { "Menu", "Potentiometer", "Zero", "Range", "Settings", "Quit" };
 const char *MENU_DESCRIPTIONS[] = { "Menu",
-	"Runs the servo at a value set by the potentiometer. The value is displayed.",
-	"Sets the servo to the zero position.",
-	"Runs the servo from its minimum value to its maximum and back. Be careful it won't hit anything!",
-	"Change servo or potentiometer settings.",
-	"Stops the test. Be sure to zero first, if needed." };
+									"Runs the servo at a value set by the potentiometer. The value is displayed.",
+									"Sets the servo to the zero position.",
+									"Runs the servo from its minimum value to its maximum and back. Be careful it won't hit anything!",
+									"Change servo or potentiometer settings.",
+									"Stops the test. Be sure to zero first, if needed." };
 
 // Settings menu and definitions
 typedef enum settings {
@@ -57,13 +57,13 @@ typedef enum settings {
 	SETTINGS_END
 } settings_t;
 
-const char *SETTINGS_OPTIONS[] = {"Menu", "Pot dead zone", "Servo center", "Servo min/max",
-	"Servo step", "Exit"};
-const char *SETTINGS_DESCRIPTIONS[] = {"Menu", "The range in which small potentiometer values aren't registered.",
-	"The zero point of the servo, in microseconds.",
-	"How far the servo can get from its center, in microseconds.",
-	"The size of the step taken by the Range test, in microseconds.",
-	"Exit settings, saving all changes."};
+const char *SETTINGS_OPTIONS[] = { "Menu", "Pot dead zone", "Servo center", "Servo min/max",
+								   "Servo step", "Exit" };
+const char *SETTINGS_DESCRIPTIONS[] = { "Menu", "The range in which small potentiometer values aren't registered.",
+										"The zero point of the servo, in microseconds.",
+										"How far the servo can get from its center, in microseconds.",
+										"The size of the step taken by the Range test, in microseconds.",
+										"Exit settings, saving all changes." };
 
 // Function headers
 void run_range();
@@ -81,7 +81,7 @@ void end_settings_set();
 
 void print_instructions();
 void print_any_menu(const char *options[], const char *descriptions[], float *vals_ptrs[],
-		size_t num_options, size_t curr_option);
+					size_t num_options, size_t curr_option);
 void print_menu();
 void print_settings();
 void print_settings_set();
@@ -89,9 +89,9 @@ void print_settings_set();
 float pot_update_val(int pin, float *val_ptr);
 bool pot_in_dead_zone(float pot_val);
 bool pot_adjust_var(bool pot_moved, float pot_val, float *var_ptr, float step,
-		float min, float max, bool wrap);
+					float min, float max, bool wrap);
 bool pot_adjust_int(bool pot_moved, float pot_val, int *var_ptr, int step,
-		int min, int max, bool wrap);
+					int min, int max, bool wrap);
 
 bool update_sw();
 void set_servo(int val);
@@ -156,23 +156,25 @@ void loop() {
 
 	if (sw_pressed) {  // Button press
 		switch (state) {
-			case MENU: {
-				end_menu();
-				break;
-			}
-			case SETTINGS: {
-				if (settings_state) {
-					end_settings_set();
+			case MENU:
+				{
+					end_menu();
+					break;
 				}
-				else {
-					end_settings_menu();
+			case SETTINGS:
+				{
+					if (settings_state) {
+						end_settings_set();
+					} else {
+						end_settings_menu();
+					}
+					break;
 				}
-				break;
-			}
-			default: {
-				end_test();
-				break;
-			}
+			default:
+				{
+					end_test();
+					break;
+				}
 		}
 	} else {  // Otherwise
 		switch (state) {
@@ -196,10 +198,11 @@ void loop() {
 					run_range();
 					break;
 				}
-			case SETTINGS: {
-				run_settings(pot_x_moved);
-				break;
-			}
+			case SETTINGS:
+				{
+					run_settings(pot_x_moved);
+					break;
+				}
 		}
 	}
 
@@ -269,8 +272,7 @@ void run_menu(bool pot_x_moved) {
 void run_settings(bool pot_x_moved) {
 	if (settings_state) {
 		run_settings_set(pot_x_moved);
-	}
-	else {
+	} else {
 		run_settings_menu(pot_x_moved);
 	}
 }
@@ -281,7 +283,7 @@ void run_settings(bool pot_x_moved) {
  * @param pot_x_moved True if the potentiometer's x has newly moved from zero this loop cycle
  */
 void run_settings_set(bool pot_x_moved) {
-	if (!pot_x_moved) { // No need to find settings constraints
+	if (!pot_x_moved) {  // No need to find settings constraints
 		return;
 	}
 
@@ -291,26 +293,30 @@ void run_settings_set(bool pot_x_moved) {
 
 	// These are just hard-coded
 	switch (settings_state) {
-		case DEAD_ZONE: {
-			step = 0.01;
-			max = 1;
-			break;
-		}
-		case CENTER: {
-			step = 100;
-			max = 3000;
-			break;
-		}
-		case DEV: {
-			step = 100;
-			max = servo_center;
-			break;
-		}
-		case STEP: {
-			step = 10;
-			max = servo_dev * 2;
-			break;
-		}
+		case DEAD_ZONE:
+			{
+				step = 0.01;
+				max = 1;
+				break;
+			}
+		case CENTER:
+			{
+				step = 100;
+				max = 3000;
+				break;
+			}
+		case DEV:
+			{
+				step = 100;
+				max = servo_center;
+				break;
+			}
+		case STEP:
+			{
+				step = 10;
+				max = servo_dev * 2;
+				break;
+			}
 	}
 	if (pot_adjust_var(pot_x_moved, pot_x, settings_get_var_ptr(settings_state), step, min, max, false)) {
 		print_settings_set();
@@ -338,15 +344,14 @@ void run_settings_menu(bool pot_x_moved) {
  */
 void end_settings_menu() {
 	Serial.println(SPACER);
-	if (settings_option == EXIT) { // exit case
+	if (settings_option == EXIT) {  // exit case
 		Serial.println("Settings saved.");
 		settings_state = SETTINGS_MENU;
 		settings_option = SETTINGS_MENU + 1;
 
 		state = MENU;
 		print_menu();
-	}
-	else {
+	} else {
 		settings_state = settings_option;
 
 		Serial.print(SETTINGS_OPTIONS[settings_state]);
@@ -376,22 +381,25 @@ void end_menu() {
 	state = menu_option;
 
 	// Print transition to test
-	switch(state) {
-		case SETTINGS: {
-			print_settings();
-			break;
-		}
-		case QUIT: {
-			Serial.println(SPACER);
-			Serial.println("Servo test stopped. Press RESET on Arduino to restart.");
-			break;
-		}
-		default: {
-			Serial.println(SPACER);
-			Serial.print(MENU_OPTIONS[state]);
-			Serial.println(" test running.");
-			break;
-		}
+	switch (state) {
+		case SETTINGS:
+			{
+				print_settings();
+				break;
+			}
+		case QUIT:
+			{
+				Serial.println(SPACER);
+				Serial.println("Servo test stopped. Press RESET on Arduino to restart.");
+				break;
+			}
+		default:
+			{
+				Serial.println(SPACER);
+				Serial.print(MENU_OPTIONS[state]);
+				Serial.println(" test running.");
+				break;
+			}
 	}
 }
 
@@ -431,7 +439,7 @@ void print_instructions() {
  * @param curr_option The option to star as being "hovered over"
  */
 void print_any_menu(const char *options[], const char *descriptions[], float *vals_ptrs[],
-		size_t num_options, size_t curr_option) {
+					size_t num_options, size_t curr_option) {
 	Serial.println(SPACER);
 	for (size_t i = 1; i < num_options; i++) {
 		if (curr_option == i) {  // Star the hovered option
@@ -555,12 +563,12 @@ float pot_update_val(int pin, float *val_ptr) {
  * @return True if the variable has been adjusted, false otherwise
  */
 bool pot_adjust_var(bool pot_moved, float pot_val, float *var_ptr, float step,
-		float min, float max, bool wrap) {
+					float min, float max, bool wrap) {
 	if (pot_moved) {
 		if (pot_val > 0) {  // move right
 			(*var_ptr) += step;
 			if (*var_ptr > max) {
-				*var_ptr = min ? wrap : max; 
+				*var_ptr = min ? wrap : max;
 				Serial.println(*var_ptr);
 			}
 			return true;
@@ -594,11 +602,11 @@ bool pot_adjust_var(bool pot_moved, float pot_val, float *var_ptr, float step,
  * @return True if the variable has been adjusted, false otherwise
  */
 bool pot_adjust_int(bool pot_moved, float pot_val, int *var_ptr, int step,
-		int min, int max, bool wrap) {
-	float var_float = (float) (*var_ptr);
-	bool adjusted = pot_adjust_var(pot_moved, pot_val, &var_float, (float) step, (float) min, (float) max, wrap);
+					int min, int max, bool wrap) {
+	float var_float = (float)(*var_ptr);
+	bool adjusted = pot_adjust_var(pot_moved, pot_val, &var_float, (float)step, (float)min, (float)max, wrap);
 	*var_ptr = round(var_float);
-	
+
 	return adjusted;
 }
 
@@ -610,20 +618,25 @@ bool pot_adjust_int(bool pot_moved, float pot_val, int *var_ptr, int step,
  */
 float *settings_get_var_ptr(int setting) {
 	switch (setting) {
-		case DEAD_ZONE: {
-			return &pot_dead_zone;
-		}
-		case CENTER: {
-			return &servo_center;
-		}
-		case DEV: {
-			return &servo_dev;
-		}
-		case STEP: {
-			return &servo_step;
-		}
-		default: {
-			return NULL;
-		}
+		case DEAD_ZONE:
+			{
+				return &pot_dead_zone;
+			}
+		case CENTER:
+			{
+				return &servo_center;
+			}
+		case DEV:
+			{
+				return &servo_dev;
+			}
+		case STEP:
+			{
+				return &servo_step;
+			}
+		default:
+			{
+				return NULL;
+			}
 	}
 }
