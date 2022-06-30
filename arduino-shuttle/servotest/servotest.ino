@@ -19,6 +19,7 @@ const int DELAY = 50;           // milliseconds
 const float POT_ANALOG_MAX = 1023;  // max value of the potentiometer (min is assumed 0)
 const float POT_MAX = 1;
 float pot_dead_zone;  // on the [-POT_MAX, POT_MAX] scale
+float pot_vel_factor;      // >0 if the pot should affect velocity instead of position in the Pot test
 
 // Servo constants
 float servo_center;  // center position, in microseconds
@@ -50,6 +51,7 @@ const char *MENU_DESCRIPTIONS[] = { "Menu",
 typedef enum settings {
 	SETTINGS_MENU,
 	DEAD_ZONE,
+	VEL,
 	CENTER,
 	DEV,
 	STEP,
@@ -57,13 +59,16 @@ typedef enum settings {
 	SETTINGS_END
 } settings_t;
 
-const char *SETTINGS_OPTIONS[] = { "Menu", "Pot dead zone", "Servo center", "Servo min/max",
-								   "Servo step", "Exit" };
+// TODO: Add ability to flip potentiometer direction
+
+const char *SETTINGS_OPTIONS[] = { "Menu", "Pot dead zone", "Pot velocity toggle", "Servo center", "Servo min/max",
+		"Servo step", "Exit" };
 const char *SETTINGS_DESCRIPTIONS[] = { "Menu", "The range in which small potentiometer values aren't registered.",
-										"The zero point of the servo, in microseconds.",
-										"How far the servo can get from its center, in microseconds.",
-										"The size of the step taken by the Range test, in microseconds.",
-										"Exit settings, saving all changes." };
+		"0: Potentiometer sets servo position. 1: Potentiometer sets servo velocity."
+		"The zero point of the servo, in microseconds.",
+		"How far the servo can get from its center, in microseconds.",
+		"The size of the step taken by the Range test, in microseconds.",
+		"Exit settings, saving all changes." };
 
 // Function headers
 void run_range();
@@ -131,6 +136,8 @@ void setup() {
 	servo_dir_left = true;
 
 	pot_dead_zone = 0.05;
+	pot_vel_factor = 0;
+
 	servo_center = 1500;
 	servo_dev = 500;
 	servo_step = 50;
@@ -245,11 +252,17 @@ void run_zero() {
  * Called every loop while in the potentiometer test
  */
 void run_pot() {
-	int servo_in = (int)(pot_x * servo_dev + servo_center);
+	if (pot_vel_factor) {
+		increment_servo(pot_x * pot_vel_factor);
+	}
+	else {
+		int servo_in = (int)(pot_x * servo_dev + servo_center);
+		set_servo(servo_in);
+	}
+
 	if (pot_x) {
 		Serial.println(servo_in);
 	}
-	set_servo(servo_in);
 }
 
 /**
@@ -299,6 +312,11 @@ void run_settings_set(bool pot_x_moved) {
 				max = 1;
 				break;
 			}
+		case VEL: {
+			step = 1;
+			max = 10;
+			break;
+		}
 		case CENTER:
 			{
 				step = 100;
@@ -495,6 +513,24 @@ void print_menu() {
  ***********/
 
 /**
+ * Increments the servo's current position by a given value
+ * 
+ * @param val The value to increment it by, in microseconds
+ */
+void increment_servo(int val) {
+	servo_val += val;
+
+	if (servo_val > SERVO_CENTER + SERVO_DEV) {
+		servo_val = SERVO_CENTER + SERVO_DEV;
+	}
+	if (servo_val < SERVO_CENTER - SERVO_DEV) {
+		servo_val = SERVO_CENTER - SERVO_DEV;
+	}
+
+	servo.writeMicroseconds(servo_val);
+}
+
+/**
  * Sets the servo to a given value
  *
  * @param val The value to set it to, in microseconds
@@ -568,7 +604,7 @@ bool pot_adjust_var(bool pot_moved, float pot_val, float *var_ptr, float step,
 		if (pot_val > 0) {  // move right
 			(*var_ptr) += step;
 			if (*var_ptr > max) {
-				*var_ptr = min ? wrap : max;
+				*var_ptr = wrap ? min : max;
 				Serial.println(*var_ptr);
 			}
 			return true;
@@ -579,7 +615,7 @@ bool pot_adjust_var(bool pot_moved, float pot_val, float *var_ptr, float step,
 				Serial.println(max);
 				Serial.println(min);
 				Serial.println(*var_ptr);
-				*var_ptr = max ? wrap : min;
+				*var_ptr = wrap ? max : min;
 				Serial.println(*var_ptr);
 			}
 			return true;
@@ -622,6 +658,9 @@ float *settings_get_var_ptr(int setting) {
 			{
 				return &pot_dead_zone;
 			}
+		case VEL: {
+			return &pot_vel_factor;
+		}
 		case CENTER:
 			{
 				return &servo_center;

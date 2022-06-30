@@ -26,7 +26,7 @@ const float POT_DEAD_ZONE = 0.05;  // on the [-POT_MAX, POT_MAX] scale
 
 // Servo constants
 const float ARM_CENTER = 1500;  // center position, in microseconds
-const float ARM_DEV = 1000;     // how far the min/max are from the center, in microseconds
+const float ARM_DEV = 900;     // how far the min/max are from the center, in microseconds
 const int ARM_FACTOR = 10;
 const float DRIVE_CENTER = 1500;
 const float DRIVE_DEV = 500;
@@ -35,8 +35,11 @@ const float DRIVE_DEV = 500;
 Servo left_arm, right_arm, left_drive, right_drive;
 bool lock;
 bool sw;
-int arm;    // microseconds
-int drive;  // microseconds
+int arm_val;    // microseconds
+
+bool update_sw();
+bool pot_in_dead_zone(float pot_val);
+float pot_get_val(int pin);
 
 void setup() {
 	// Initialize pins
@@ -52,8 +55,7 @@ void setup() {
 	// State variables
 	lock = false;
 	sw = false;
-	arm = ARM_CENTER - ARM_DEV;
-	drive = 0;
+	arm_val = ARM_CENTER - ARM_DEV;
 
 	Serial.begin(SERIAL_SPEED);
 }
@@ -111,18 +113,16 @@ void loop() {
 		float drive_pot = pot_get_val(POT_X_PIN);
 		float arm_pot = -pot_get_val(POT_Y_PIN);
 
-		drive = drive_pot;
-		arm += arm_pot * ARM_FACTOR;
-		if (arm < ARM_CENTER - ARM_DEV) {
-			arm = ARM_CENTER - ARM_DEV;
+		arm_val += arm_pot * ARM_FACTOR;
+		if (arm_val < ARM_CENTER - ARM_DEV) {
+			arm_val = ARM_CENTER - ARM_DEV;
 		}
-		if (arm > ARM_CENTER + ARM_DEV) {
-			arm = ARM_CENTER + ARM_DEV;
+		if (arm_val > ARM_CENTER + ARM_DEV) {
+			arm_val = ARM_CENTER + ARM_DEV;
 		}
 
 		// Drive value, in [CENTER - DEV, CENTER + DEV] (in microseconds)
-		int drive_val = (int)(drive * DRIVE_DEV + DRIVE_CENTER);
-		int arm_val = arm;  //(arm * ARM_DEV + ARM_CENTER);
+		int drive_val = (int)(drive_pot * DRIVE_DEV + DRIVE_CENTER);
 
 		Serial.print("Drive: ");
 		Serial.println(drive_val);
