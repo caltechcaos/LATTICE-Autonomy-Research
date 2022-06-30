@@ -125,8 +125,8 @@ void loop() {
 		int drive_val = (int)(drive_pot * DRIVE_DEV + DRIVE_CENTER);
 
 		Serial.print("Drive: ");
-		Serial.println(drive_val);
-		Serial.print("Arm: ");
+		Serial.print(drive_val);
+		Serial.print(", Arm: ");
 		Serial.println(arm_val);
 
 		// Set servos accordingly

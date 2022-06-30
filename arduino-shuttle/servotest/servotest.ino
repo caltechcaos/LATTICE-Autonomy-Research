@@ -10,7 +10,7 @@
 // Wiring constants
 const int SERVO_PIN = 2;   // the digital PWM pin the servo is plugged into
 const int POT_X_PIN = A0;  // the analog I/O pin the potentiometer's x axis is plugged into
-const int SW_PIN = 3;      // the digital pin the switch is plugged into
+const int SW_PIN = 6;      // the digital pin the switch is plugged into
 
 // Programatic constants
 const int SERIAL_SPEED = 9600;  // bits per second, align with Tools -> Serial Monitor's dropdown menu
@@ -59,12 +59,12 @@ typedef enum settings {
 	SETTINGS_END
 } settings_t;
 
-// TODO: Add ability to flip potentiometer direction
+// TODO: Add ability to flip potentiometer direction and change servo port
 
-const char *SETTINGS_OPTIONS[] = { "Menu", "Pot dead zone", "Pot velocity toggle", "Servo center", "Servo min/max",
+const char *SETTINGS_OPTIONS[] = { "Menu", "Pot dead zone", "Pot velocity factor", "Servo center", "Servo min/max",
 		"Servo step", "Exit" };
 const char *SETTINGS_DESCRIPTIONS[] = { "Menu", "The range in which small potentiometer values aren't registered.",
-		"0: Potentiometer sets servo position. 1: Potentiometer sets servo velocity."
+		"0: Potentiometer sets servo position. 1+: Potentiometer sets servo velocity, by this factor."
 		"The zero point of the servo, in microseconds.",
 		"How far the servo can get from its center, in microseconds.",
 		"The size of the step taken by the Range test, in microseconds.",
@@ -100,6 +100,7 @@ bool pot_adjust_int(bool pot_moved, float pot_val, int *var_ptr, int step,
 
 bool update_sw();
 void set_servo(int val);
+void increment_servo(int val);
 
 float *settings_get_var_ptr(int setting);
 
@@ -253,15 +254,20 @@ void run_zero() {
  */
 void run_pot() {
 	if (pot_vel_factor) {
-		increment_servo(pot_x * pot_vel_factor);
+		int servo_in = (int) (pot_x * pot_vel_factor);
+		increment_servo(servo_in);
+
+		if (pot_x) {
+			Serial.println(servo_val);
+		}
 	}
 	else {
 		int servo_in = (int)(pot_x * servo_dev + servo_center);
 		set_servo(servo_in);
-	}
 
-	if (pot_x) {
-		Serial.println(servo_in);
+		if (pot_x) {
+			Serial.println(servo_in);
+		}
 	}
 }
 
@@ -520,11 +526,11 @@ void print_menu() {
 void increment_servo(int val) {
 	servo_val += val;
 
-	if (servo_val > SERVO_CENTER + SERVO_DEV) {
-		servo_val = SERVO_CENTER + SERVO_DEV;
+	if (servo_val > servo_center + servo_dev) {
+		servo_val = servo_center + servo_dev;
 	}
-	if (servo_val < SERVO_CENTER - SERVO_DEV) {
-		servo_val = SERVO_CENTER - SERVO_DEV;
+	if (servo_val < servo_center - servo_dev) {
+		servo_val = servo_center - servo_dev;
 	}
 
 	servo.writeMicroseconds(servo_val);
@@ -605,18 +611,12 @@ bool pot_adjust_var(bool pot_moved, float pot_val, float *var_ptr, float step,
 			(*var_ptr) += step;
 			if (*var_ptr > max) {
 				*var_ptr = wrap ? min : max;
-				Serial.println(*var_ptr);
 			}
 			return true;
 		} else if (pot_val < 0) {  // move left
 			(*var_ptr) -= step;
 			if (*var_ptr < min) {
-				Serial.println(wrap);
-				Serial.println(max);
-				Serial.println(min);
-				Serial.println(*var_ptr);
 				*var_ptr = wrap ? max : min;
-				Serial.println(*var_ptr);
 			}
 			return true;
 		}
