@@ -14,6 +14,7 @@ const int RIGHT_DRIVE_PIN = 5;
 
 const int POT_X_PIN = A0;  // the analog I/O pin the potentiometer's x axis is plugged into
 const int POT_Y_PIN = A1;
+const int POT_OFFSET_PIN = A2; // for the third potentiometer, which controls offset
 const int SW_PIN = 6;  // the digital pin the switch is plugged into
 
 // Programatic constants
@@ -27,7 +28,8 @@ const float POT_DEAD_ZONE = 0.05;  // on the [-POT_MAX, POT_MAX] scale
 // Servo constants
 const float ARM_CENTER = 1500;  // center position, in microseconds
 const float ARM_DEV = 900;     // how far the min/max are from the center, in microseconds
-const int ARM_FACTOR = 10;
+const float ARM_FACTOR = 10;     // factor of acceleration of the arms, by potentiometer input
+const float OFFSET_MAX = 50;  // how much the offset potentiometer can affect the arms by, in microseconds
 const float DRIVE_CENTER = 1500;
 const float DRIVE_DEV = 500;
 
@@ -40,6 +42,8 @@ int arm_val;    // microseconds
 bool update_sw();
 bool pot_in_dead_zone(float pot_val);
 float pot_get_val(int pin);
+float pot_get_true_val(int pin);
+void set_servo(Servo servo, int val, int min, int max);
 
 void setup() {
 	// Initialize pins
@@ -85,21 +89,55 @@ bool pot_in_dead_zone(float pot_val) {
 
 /**
  * Gets the value at a pin, assuming a potentiometer is hooked up to it
+ * Maps it to between [-POT_MAX, POT_MAX]. Does not cube or apply a deadzone.
+ * Less intuitive for human control.
+ *
+ * @param pin The pin the potentiometer is plugged into
+ * @return The value of the potentiometer
+ */
+float pot_get_true_val(int pin) {
+	float pot_val = (float)analogRead(pin);
+	// Anchors between -MAX and MAX. 
+	return pot_val / POT_ANALOG_MAX * (POT_MAX * 2) - POT_MAX;
+}
+
+/**
+ * Gets the value at a pin, assuming a potentiometer is hooked up to it
  * Maps it to between [-POT_MAX, POT_MAX] and applies a dead zone
  * 
  * @param pin The pin the potentiometer is plugged into
  * @return The value of the potentiometer
  */
 float pot_get_val(int pin) {
-	float pot_val = (float)analogRead(pin);
-	// Anchors between MIN and MAX. Cubing is more intuitive for human control
-	pot_val = pow(pot_val / POT_ANALOG_MAX * (POT_MAX * 2) - POT_MAX, 3);
+	float pot_val = pot_get_true_val(pin);
+	// Cubing is more intuitive for human control
+	pot_val = pow(pot_val, 3);
 
 	if (pot_in_dead_zone(pot_val)) {
 		pot_val = 0;
 	}
 
 	return pot_val;
+}
+
+/**
+ * Sets a servo to a given value of microseconds, ensuring it is kept within the
+ * minimum and maximum bounds
+ *
+ * @param servo The servo to control
+ * @param val The value to give it, in microseconds
+ * @param min The minimum value it can have, in microseconds
+ * @param max The maximum value it can have, in microseconds
+ */
+void set_servo(Servo servo, int val, int min, int max) {
+	// Crop between min and max
+	if (val < min) {
+		val = min;
+	}
+	if (val > max) {
+		val = max;
+	}
+	servo.writeMicroseconds(val);
 }
 
 void loop() {
@@ -111,29 +149,30 @@ void loop() {
 	if (!lock) {
 		// Potentiometer value, in [-POT_MAX, POT_MAX]
 		float drive_pot = pot_get_val(POT_X_PIN);
-		float arm_pot = -pot_get_val(POT_Y_PIN);
-
-		arm_val += arm_pot * ARM_FACTOR;
-		if (arm_val < ARM_CENTER - ARM_DEV) {
-			arm_val = ARM_CENTER - ARM_DEV;
-		}
-		if (arm_val > ARM_CENTER + ARM_DEV) {
-			arm_val = ARM_CENTER + ARM_DEV;
-		}
+		float arm_pot = -pot_get_val(POT_Y_PIN); // flip the y axis for intuition reasons
+		float offset_pot = pot_get_true_val(POT_OFFSET_PIN);
 
 		// Drive value, in [CENTER - DEV, CENTER + DEV] (in microseconds)
 		int drive_val = (int)(drive_pot * DRIVE_DEV + DRIVE_CENTER);
 
+		// Adjust the arm value by the potentiometer (using the potentiometer as velocity)
+		arm_val += (int)(arm_pot * ARM_FACTOR);
+
+		// Apply the offset value
+		int offset_val = (int)(offset_pot * OFFSET_MAX);
+
 		Serial.print("Drive: ");
 		Serial.print(drive_val);
 		Serial.print(", Arm: ");
-		Serial.println(arm_val);
+		Serial.print(arm_val);
+		Serial.print(", Offset: ");
+		Serial.println(offset_val); // 14 aligned them today (7/5/22)
 
 		// Set servos accordingly
-		left_arm.writeMicroseconds(arm_val);
-		right_arm.writeMicroseconds(ARM_CENTER * 2 - arm_val);
-		left_drive.writeMicroseconds(drive_val);
-		right_drive.writeMicroseconds(drive_val);
+		set_servo(left_arm, arm_val + offset_val, ARM_CENTER - ARM_DEV, ARM_CENTER + ARM_DEV);
+		set_servo(right_arm, ARM_CENTER * 2 - (arm_val - offset_val), ARM_CENTER - ARM_DEV, ARM_CENTER + ARM_DEV);
+		set_servo(left_drive, drive_val, DRIVE_CENTER - DRIVE_DEV, DRIVE_CENTER + DRIVE_DEV);
+		set_servo(right_drive, drive_val, DRIVE_CENTER - DRIVE_DEV, DRIVE_CENTER + DRIVE_DEV);
 	}
 
 	delay(DELAY);
