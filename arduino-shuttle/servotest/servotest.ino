@@ -157,10 +157,35 @@ void loop() {
 	if (state == QUIT) {
 		return;
 	}
-
+	
 	// Update state
 	bool pot_x_moved = pot_update_val(POT_X_PIN, &pot_x);
 	bool sw_pressed = update_sw();
+
+	if (Serial.available()) {
+		char input = (uint8_t) Serial.read();
+		switch (input) {
+			case ' ': {
+				sw_pressed = true;
+				break;
+			}
+			case 'A':
+			case 'a': {
+				pot_x_moved = true;
+				pot_x = -POT_MAX;
+				break;
+			}
+			case 'd':
+			case 'D': {
+				pot_x_moved = true;
+				pot_x = POT_MAX;
+				break;
+			}
+			default: {
+				break;
+			}
+		}
+	}
 
 	if (sw_pressed) {  // Button press
 		switch (state) {

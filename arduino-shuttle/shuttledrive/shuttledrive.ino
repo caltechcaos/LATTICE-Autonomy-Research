@@ -172,7 +172,7 @@ void loop() {
 		set_servo(left_arm, arm_val + offset_val, ARM_CENTER - ARM_DEV, ARM_CENTER + ARM_DEV);
 		set_servo(right_arm, ARM_CENTER * 2 - (arm_val - offset_val), ARM_CENTER - ARM_DEV, ARM_CENTER + ARM_DEV);
 		set_servo(left_drive, drive_val, DRIVE_CENTER - DRIVE_DEV, DRIVE_CENTER + DRIVE_DEV);
-		set_servo(right_drive, drive_val, DRIVE_CENTER - DRIVE_DEV, DRIVE_CENTER + DRIVE_DEV);
+		set_servo(right_drive, DRIVE_CENTER * 2 - drive_val, DRIVE_CENTER - DRIVE_DEV, DRIVE_CENTER + DRIVE_DEV);
 	}
 
 	delay(DELAY);
