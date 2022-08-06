@@ -33,6 +33,8 @@ const float OFFSET_MAX = 50;  // how much the offset potentiometer can affect th
 const float DRIVE_CENTER = 1500;
 const float DRIVE_DEV = 500;
 
+const bool DRIVE_IN = false;
+
 // State variables
 Servo left_arm, right_arm, left_drive, right_drive;
 bool lock;
@@ -162,7 +164,9 @@ void loop() {
 		int offset_val = (int)(offset_pot * OFFSET_MAX);
 
 		Serial.print("Drive: ");
-		Serial.print(drive_val);
+		Serial.print(left_drive.read());
+    Serial.print(", ");
+		Serial.print(right_drive.read());
 		Serial.print(", Arm: ");
 		Serial.print(arm_val);
 		Serial.print(", Offset: ");
@@ -172,7 +176,7 @@ void loop() {
 		set_servo(left_arm, arm_val + offset_val, ARM_CENTER - ARM_DEV, ARM_CENTER + ARM_DEV);
 		set_servo(right_arm, ARM_CENTER * 2 - (arm_val - offset_val), ARM_CENTER - ARM_DEV, ARM_CENTER + ARM_DEV);
 		set_servo(left_drive, drive_val, DRIVE_CENTER - DRIVE_DEV, DRIVE_CENTER + DRIVE_DEV);
-		set_servo(right_drive, DRIVE_CENTER * 2 - drive_val, DRIVE_CENTER - DRIVE_DEV, DRIVE_CENTER + DRIVE_DEV);
+		set_servo(right_drive, DRIVE_IN ? DRIVE_CENTER * 2 - drive_val : drive_val, DRIVE_CENTER - DRIVE_DEV, DRIVE_CENTER + DRIVE_DEV);
 	}
 
 	delay(DELAY);
