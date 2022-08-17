@@ -1,4 +1,5 @@
 *.tif
+
 ShuttleModeling/*.png
 ShuttleModeling/*.gif
-*/ipynb_checkpoints/*
+*.ipynb_checkpoints/
