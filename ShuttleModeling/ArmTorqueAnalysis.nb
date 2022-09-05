@@ -1,0 +1,616 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 12.2' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       158,          7]
+NotebookDataLength[     24218,        608]
+NotebookOptionsPosition[     22359,        570]
+NotebookOutlinePosition[     22773,        586]
+CellTagsIndexPosition[     22730,        583]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+Cell["Deriving equation for estimating torque for an arm", "Text",
+ CellChangeTimes->{{3.8713471955582647`*^9, 3.8713472091537747`*^9}, {
+  3.871347255238123*^9, 
+  3.8713472747774663`*^9}},ExpressionUUID->"6dd8e97d-ff4d-4788-bd83-\
+fd50c7173ff4"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"FullSimplify", "[", 
+   RowBox[{
+    RowBox[{"T", " ", 
+     SubscriptBox["L", "arm"], " ", 
+     RowBox[{"Sin", "[", 
+      RowBox[{
+       RowBox[{"ArcTan", "[", 
+        RowBox[{
+         RowBox[{"(", 
+          RowBox[{
+           SubscriptBox["L", "arm"], " ", 
+           RowBox[{"Sin", "[", "\[Alpha]", "]"}]}], ")"}], "/", 
+         RowBox[{"(", 
+          RowBox[{
+           RowBox[{
+            SubscriptBox["L", "arm"], 
+            RowBox[{"Cos", "[", "\[Alpha]", "]"}]}], " ", "-", " ", 
+           SubscriptBox["d", "ap"]}], ")"}]}], "]"}], " ", "-", " ", 
+       "\[Alpha]"}], "]"}]}], " ", "+", " ", 
+    RowBox[{"T", " ", 
+     SubscriptBox["L", "arm"], " ", 
+     RowBox[{"Sin", "[", 
+      RowBox[{
+       RowBox[{"ArcTan", "[", 
+        RowBox[{
+         RowBox[{"(", 
+          RowBox[{
+           SubscriptBox["L", "arm"], " ", 
+           RowBox[{"Sin", "[", "\[Alpha]", "]"}]}], ")"}], "/", 
+         RowBox[{"(", 
+          RowBox[{
+           SubscriptBox["d", "ap"], " ", "+", " ", 
+           SubscriptBox["d", "pdp"], "-", 
+           RowBox[{
+            SubscriptBox["L", "arm"], 
+            RowBox[{"Cos", "[", "\[Alpha]", "]"}]}]}], ")"}]}], "]"}], " ", 
+       "-", " ", "\[Alpha]"}], "]"}]}], " ", "+", " ", 
+    RowBox[{"m", " ", 
+     RowBox[{
+      SubscriptBox["L", "arm"], "/", "2"}], "g", " ", 
+     RowBox[{"Cos", "[", "\[Alpha]", "]"}]}]}], "]"}], " ", "/.", " ", 
+  RowBox[{"{", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"Subscript", "[", 
+      RowBox[{"L", ",", "arm"}], "]"}], "\[Rule]", "Larm"}], ",", 
+    RowBox[{
+     RowBox[{"Subscript", "[", 
+      RowBox[{"d", ",", "ap"}], "]"}], "\[Rule]", "dap"}], ",", 
+    RowBox[{
+     RowBox[{"Subscript", "[", 
+      RowBox[{"d", ",", "pdp"}], "]"}], "\[Rule]", "dpdp"}]}], 
+   "}"}]}]], "Input",
+ CellChangeTimes->{{3.8699219727191396`*^9, 3.8699219727264214`*^9}, {
+   3.8700221149567604`*^9, 3.8700221902974663`*^9}, {3.8700222799369125`*^9, 
+   3.870022327366082*^9}, {3.870022563760104*^9, 3.8700225978398447`*^9}, {
+   3.8700227332969646`*^9, 3.870022757701953*^9}, {3.8700229072612267`*^9, 
+   3.870022909567891*^9}, 3.870022951851082*^9, 3.870023709519745*^9, 
+   3.8700237532818546`*^9},
+ CellLabel->"In[1]:=",ExpressionUUID->"5c49b18a-bec2-45df-bb4a-f765e17afdf5"],
+
+Cell[BoxData[
+ RowBox[{
+  FractionBox["1", "2"], " ", "Larm", " ", 
+  RowBox[{"(", 
+   RowBox[{
+    RowBox[{"g", " ", "m", " ", 
+     RowBox[{"Cos", "[", "\[Alpha]", "]"}]}], "-", 
+    RowBox[{"2", " ", "T", " ", 
+     RowBox[{"(", 
+      RowBox[{
+       RowBox[{"Sin", "[", 
+        RowBox[{"\[Alpha]", "+", 
+         RowBox[{"ArcTan", "[", 
+          FractionBox[
+           RowBox[{"Larm", " ", 
+            RowBox[{"Sin", "[", "\[Alpha]", "]"}]}], 
+           RowBox[{"dap", "-", 
+            RowBox[{"Larm", " ", 
+             RowBox[{"Cos", "[", "\[Alpha]", "]"}]}]}]], "]"}]}], "]"}], "+", 
+       RowBox[{"Sin", "[", 
+        RowBox[{"\[Alpha]", "-", 
+         RowBox[{"ArcTan", "[", 
+          FractionBox[
+           RowBox[{"Larm", " ", 
+            RowBox[{"Sin", "[", "\[Alpha]", "]"}]}], 
+           RowBox[{"dap", "+", "dpdp", "-", 
+            RowBox[{"Larm", " ", 
+             RowBox[{"Cos", "[", "\[Alpha]", "]"}]}]}]], "]"}]}], "]"}]}], 
+      ")"}]}]}], ")"}]}]], "Output",
+ CellChangeTimes->{
+  3.8699219776567087`*^9, 3.8700221928724766`*^9, {3.8700223030083*^9, 
+   3.870022328912842*^9}, 3.8700225682501507`*^9, 3.870022600043174*^9, 
+   3.870022759361481*^9, 3.870022912480171*^9, 3.8700229559533215`*^9, 
+   3.8700237126439314`*^9, 3.871347726918828*^9, 3.871350683266091*^9},
+ CellLabel->"Out[1]=",ExpressionUUID->"aed0db9f-d4e7-4d3d-a413-cdbb9cf85a33"]
+}, Open  ]],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"Torque", "[", 
+   RowBox[{
+   "\[Alpha]_", ",", " ", "Larm_", ",", " ", "dap_", ",", " ", "dpdp_"}], 
+   "]"}], ":=", 
+  RowBox[{
+   FractionBox["1", "2"], " ", "Larm", " ", 
+   RowBox[{"(", 
+    RowBox[{
+     RowBox[{"g", " ", "m", " ", 
+      RowBox[{"Cos", "[", "\[Alpha]", "]"}]}], "-", 
+     RowBox[{"2", " ", "T", " ", 
+      RowBox[{"(", 
+       RowBox[{
+        RowBox[{"Sin", "[", 
+         RowBox[{"\[Alpha]", "+", 
+          RowBox[{"ArcTan", "[", 
+           FractionBox[
+            RowBox[{"Larm", " ", 
+             RowBox[{"Sin", "[", "\[Alpha]", "]"}]}], 
+            RowBox[{"dap", "-", 
+             RowBox[{"Larm", " ", 
+              RowBox[{"Cos", "[", "\[Alpha]", "]"}]}]}]], "]"}]}], "]"}], "+", 
+        RowBox[{"Sin", "[", 
+         RowBox[{"\[Alpha]", "-", 
+          RowBox[{"ArcTan", "[", 
+           FractionBox[
+            RowBox[{"Larm", " ", 
+             RowBox[{"Sin", "[", "\[Alpha]", "]"}]}], 
+            RowBox[{"dap", "+", "dpdp", "-", 
+             RowBox[{"Larm", " ", 
+              RowBox[{"Cos", "[", "\[Alpha]", "]"}]}]}]], "]"}]}], "]"}]}], 
+       ")"}]}]}], ")"}]}]}]], "Input",
+ CellChangeTimes->{{3.870022431810628*^9, 3.8700224493305674`*^9}, {
+   3.8700225075827*^9, 3.8700225507109385`*^9}, 3.8700226098119135`*^9, {
+   3.870022926782838*^9, 3.870022933695309*^9}, 3.8700229673933086`*^9},
+ CellLabel->"In[2]:=",ExpressionUUID->"8e1c04b2-6970-49be-ac77-b339d7458e72"],
+
+Cell["\<\
+If we assume around 250 N of tension at the stake rail and estimate the \
+hytorc gearing to be about 5000 and cap the maximum motor torque at 200 mNm, \
+we can calculate the percent power needed to move the arm at the ends. Notice \
+that its quite small, thus ensuring that we can accurately control our arm \
+position without having to account for the changing tension throughout the \
+arm transition.\
+\>", "Text",
+ CellChangeTimes->{{3.871347280538724*^9, 3.8713473015587435`*^9}, {
+  3.8713473419239597`*^9, 3.871347349546175*^9}, {3.871347433155469*^9, 
+  3.871347494014675*^9}, {3.8713478415673356`*^9, 
+  3.8713478723350463`*^9}},ExpressionUUID->"6a895c53-d43e-433c-aa46-\
+d5283b61c27b"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{
+   RowBox[{"(", 
+    RowBox[{
+     RowBox[{"Torque", "[", 
+      RowBox[{
+       RowBox[{"109", " ", "*", " ", 
+        RowBox[{"Pi", " ", "/", " ", "180"}]}], ",", " ", "0.25", ",", " ", 
+       "0.2", ",", " ", "0.1542"}], "]"}], " ", "/.", " ", 
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"g", " ", "\[Rule]", " ", "9.8"}], ",", " ", 
+       RowBox[{"m", " ", "\[Rule]", " ", ".35"}], ",", " ", 
+       RowBox[{"T", " ", "\[Rule]", " ", "250"}]}], "}"}]}], ")"}], " ", "/", 
+   " ", "5000"}], " ", "/", " ", "0.2"}]], "Input",
+ CellChangeTimes->{{3.8700224578496914`*^9, 3.87002248842138*^9}, {
+  3.8700229938183546`*^9, 3.8700230431608353`*^9}, {3.8700233002416763`*^9, 
+  3.8700233341817465`*^9}, {3.871347468006078*^9, 3.8713474726703873`*^9}},
+ CellLabel->"In[3]:=",ExpressionUUID->"4caf7b99-d2b0-4e0d-afa3-07cca132e12a"],
+
+Cell[BoxData[
+ RowBox[{"-", "0.09394519719446137`"}]], "Output",
+ CellChangeTimes->{
+  3.870022488821946*^9, 3.870022553465562*^9, 3.8700226146523123`*^9, 
+   3.870022937168923*^9, 3.870022970645534*^9, {3.870023032000493*^9, 
+   3.870023043642208*^9}, {3.8700233108903127`*^9, 3.870023334851434*^9}, 
+   3.871347729097204*^9, 3.871350683455756*^9},
+ CellLabel->"Out[3]=",ExpressionUUID->"d759a844-3f6b-4fb4-ad09-d7cef7e11daf"]
+}, Open  ]],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{
+   SubscriptBox["y", "min"], " ", "=", " ", "0.5"}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   SubscriptBox["L", "c0"], "=", "20.5"}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"g", " ", "=", " ", "9.8"}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   SubscriptBox["m", "s"], "=", " ", "16"}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   SubscriptBox["L", "cxs"], "=", "0.24"}], ";"}]}], "Input",
+ CellChangeTimes->{{3.8713463686445913`*^9, 3.871346419963199*^9}, {
+   3.871346450290736*^9, 3.871346558108184*^9}, 3.8713466361874332`*^9, {
+   3.8713467074460993`*^9, 3.871346707901786*^9}, {3.871346774165227*^9, 
+   3.8713467746893225`*^9}, {3.8713468067060957`*^9, 3.87134681017778*^9}},
+ CellLabel->"In[4]:=",ExpressionUUID->"1fff6d88-f1ce-4fc2-95f6-36b09f14c9ac"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"endtension", " ", "=", " ", 
+  RowBox[{
+   RowBox[{"{", 
+    RowBox[{
+     FractionBox[
+      RowBox[{"g", " ", 
+       SubscriptBox["L", "cxs"], " ", 
+       SubscriptBox["m", "s"], " ", 
+       RowBox[{"(", 
+        RowBox[{
+         SubscriptBox["L", "cs"], "-", 
+         SubscriptBox["x", "s"]}], ")"}]}], 
+      RowBox[{"y", " ", 
+       SubscriptBox["L", "cs"]}]], "/.", " ", 
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{
+        SubscriptBox["x", "s"], " ", "\[Rule]", " ", 
+        SqrtBox[
+         RowBox[{
+          SubsuperscriptBox["L", "cxs", "2"], "-", 
+          FractionBox[
+           SuperscriptBox[
+            RowBox[{"(", 
+             RowBox[{
+              RowBox[{"-", 
+               SubsuperscriptBox["L", "c", "2"]}], "+", 
+              SubsuperscriptBox["L", "cs", "2"], "+", 
+              RowBox[{"2", " ", 
+               SubscriptBox["L", "c"], " ", 
+               SubscriptBox["L", "cxs"]}]}], ")"}], "2"], 
+           RowBox[{"4", " ", 
+            SubsuperscriptBox["L", "cs", "2"]}]]}]]}], ",", " ", 
+       RowBox[{"y", " ", "\[Rule]", " ", 
+        FractionBox[
+         RowBox[{
+          RowBox[{"-", 
+           SubsuperscriptBox["L", "c", "2"]}], "+", 
+          SubsuperscriptBox["L", "cs", "2"], "+", 
+          RowBox[{"2", " ", 
+           SubscriptBox["L", "c"], " ", 
+           SubscriptBox["L", "cxs"]}]}], 
+         RowBox[{"2", " ", 
+          SubscriptBox["L", "cs"]}]]}]}], "}"}]}], "}"}], "/.", 
+   RowBox[{"{", 
+    RowBox[{
+     SubscriptBox["L", "c"], "->", 
+     RowBox[{"Sqrt", "[", 
+      RowBox[{
+       RowBox[{
+        SubscriptBox["L", "cs"], "^", "2"}], " ", "+", " ", 
+       RowBox[{"4", " ", "*", " ", 
+        RowBox[{
+         SubscriptBox["y", "min"], "^", "2"}]}]}], "]"}]}], 
+    "}"}]}]}]], "Input",
+ CellChangeTimes->{{3.8713459708610106`*^9, 3.871346054465386*^9}, {
+   3.871346103028866*^9, 3.8713461255259867`*^9}, {3.871346187261702*^9, 
+   3.8713462332360015`*^9}, {3.871346567181716*^9, 3.8713465673329144`*^9}, 
+   3.8713465973562155`*^9, {3.871346643796044*^9, 3.871346650445652*^9}, {
+   3.8713466951267977`*^9, 3.871346704437087*^9}, 3.871346761807329*^9, {
+   3.871346802819607*^9, 3.8713468258739185`*^9}},
+ CellLabel->"In[9]:=",ExpressionUUID->"c9b1566a-6d52-4c68-98f0-1756fb7effbc"],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  FractionBox[
+   RowBox[{"75.264`", " ", 
+    RowBox[{"(", 
+     RowBox[{
+      SubscriptBox["L", "cs"], "-", 
+      SqrtBox[
+       RowBox[{"0.0576`", "\[VeryThinSpace]", "-", 
+        FractionBox[
+         SuperscriptBox[
+          RowBox[{"(", 
+           RowBox[{
+            RowBox[{"-", "1.`"}], "+", 
+            RowBox[{"0.48`", " ", 
+             SqrtBox[
+              RowBox[{"1.`", "\[VeryThinSpace]", "+", 
+               SubsuperscriptBox["L", "cs", "2"]}]]}]}], ")"}], "2"], 
+         RowBox[{"4", " ", 
+          SubsuperscriptBox["L", "cs", "2"]}]]}]]}], ")"}]}], 
+   RowBox[{
+    RowBox[{"-", "1.`"}], "+", 
+    RowBox[{"0.48`", " ", 
+     SqrtBox[
+      RowBox[{"1.`", "\[VeryThinSpace]", "+", 
+       SubsuperscriptBox["L", "cs", "2"]}]]}]}]], "}"}]], "Output",
+ CellChangeTimes->{{3.8713460086310396`*^9, 3.8713460369466*^9}, 
+   3.87134612637531*^9, {3.871346562321106*^9, 3.8713465977681274`*^9}, {
+   3.8713466392775745`*^9, 3.8713466508091974`*^9}, {3.8713467621629057`*^9, 
+   3.871346826439413*^9}, 3.871347751393812*^9, 3.8713506854648495`*^9},
+ CellLabel->"Out[9]=",ExpressionUUID->"372f9ed3-0c38-4154-b44f-69e607e8d9de"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"Plot", "[", 
+  RowBox[{"endtension", ",", " ", 
+   RowBox[{"{", 
+    RowBox[{
+     SubscriptBox["L", "cs"], ",", " ", "10", ",", " ", "25"}], "}"}], ",", 
+   " ", 
+   RowBox[{
+   "PlotLabel", "\[Rule]", " ", 
+    "\"\<Left tension on shuttle off stake rail for varying stake \
+spans\>\""}], ",", 
+   RowBox[{"Frame", "\[Rule]", " ", "True"}], ",", " ", " ", 
+   RowBox[{"FrameLabel", "\[Rule]", 
+    RowBox[{"{", 
+     RowBox[{"\"\<Tension\>\"", ",", "\"\<Stake Span\>\""}], "}"}]}]}], 
+  "]"}]], "Input",
+ CellChangeTimes->{
+  3.8713461136983852`*^9, {3.8713470052976627`*^9, 3.871347034182722*^9}, {
+   3.8713477618004026`*^9, 3.8713477620709934`*^9}, {3.8713506174079714`*^9, 
+   3.8713506744769297`*^9}, 3.8713507218499613`*^9},
+ CellLabel->"In[11]:=",ExpressionUUID->"9961172e-6090-4a6f-9710-185eb2db47e8"],
+
+Cell[BoxData[
+ GraphicsBox[{{{}, {}, 
+    TagBox[
+     {RGBColor[0.368417, 0.506779, 0.709798], AbsoluteThickness[1.6], Opacity[
+      1.], LineBox[CompressedData["
+1:eJwVzHs01HkABfBJ0tTuUtSQVrHNeIyYYRi/POpuEyeRJDZSXvn+ZqTVbtrQ
+k5bdRsKqFXnUtI4iW5aO45EhSYdSu6KxkbYWCSO9ve1v/7jnns+551yTsH0+
+RIPFYm1m8n+HZbguZLG4WFHpGD2+VoYlqwTsQA0uTuTqDfswvlNuoFWhyUV5
+ieHZEhcZzDuG5uxdwOwVYd+HOMswop8xrtLlQr/2SlDLGhni8noGrvO4iA0q
+eFtoJ0P6lZi7wR5cnO7eHXOCL0OdsiixLpOLeG7bQyVHBqcDmwytHHkIzS0u
+MhmRYjQv0rqpjYeANSGjyhYp4tUeH0JkpjA61rzBrlgKQZNMVbTQDMokSSpH
+LoWBnha14pIZ2Isu7/x8rxTGr56Vw80c7NSQvm+9pJjbF/si/KU5LCuP9eiI
+pFjpl5F246gFFG8EBq8NpdjhNbC9zJiPMVas22oNKR7UKPO7KvkQRk4cdR2m
+YbTFN0vLyxInPkkkT1Q0TkWa/v7stSUs/o6eaW6gYTsVi96fVkNcndO7tJTG
+2FL260y+FZK3LntzJ5dGtt833h73rMBzJqzKZBoHFvCElqHWSLCYNL10iEaU
+m9Cyaq4AKX03572PoKH4VFOwP0eALLZ/uXYgjXGDhi/VK4U4e1Vrx3kPGoua
+k+oV3wmxy6E+fYkLDUm5fNVwjRC9YY0P9IQ0tF5Ynj39hQ3mBvS3yL+i0b9J
+u7ExwAZzYrYgnEOj3M279UiBDewa+oqHFjJ/Pwt7T32wQeBHOI3OEMjnbK0W
+fm0LuSixlv+eIKNeJ3/1GVv08CN8BwcITupaBxb9a4uSahHHrYcgJz9FVWMt
+wngBv7a0ncBlnzyUFy+CT53Ro8IWgqm4pmLufRGMlemlWbcIrujvbi3g2OHP
+5yYSVhVB73je9GGpHdhW+8n4dQJnzjL1QJkd5utaabZdJuDG2A6WaNqjqtTs
++PoLBBa6KYVaW+3hmWbESjxHsByuzs9z7JE6cV7OSyfIK8t9pqu2R+7MYFT4
+SQKnYLv1Tygxrg70ZwclEER47ykbSxbDJ7s7YTKOILF9dvJclxiFen1Wb/cT
+3Mzo0Gw1dUAcogx/2Uvw46/uywNiHZD2rrhKRQikbdOjhxodQL/lGdUGE1CX
+Fl800qHw0nNW/CqAILvi9k79EAp+svbMW9sI9OdVdBZepdCpl7aC70XQo1jr
+MlZCoSn6dNxixgVr7yrcr1HoH/JXjW0msI3t3DNcSmGlo1/OXcZeQxNTNhUU
+/Ac7NhDGSX+tM6mtp5DSnmKk8CR4l9cc8aiDwkHf+BeGHgTVjj4PuCoKd7ji
+TA3G8aontgc7KWxUF3kObiLQXjw8adBFQSe5+VYVY36idmrQPxRaR7ru+zMO
+3bOt7NUgBff8PnLOncB8fjfHaZhC9UaJ63HGI7+FH05RU1iXuN1MyvjI0x82
+CEYpRHYq3okZZ3lnPT7wgYLI+I+SxxsJgtXGTk0fKSQdrVAoGZsmF13QH6MQ
+0hCVXcj4xu1qWfUEheeCj+kHGR8OkbR+NkUheF9jehDj9dP3bHZNU1jWKDnj
+xph93jfz2gyFuqroLGvGD8VPJ2Znmb1720UO4/8AvY0ivQ==
+       "]]},
+     Annotation[#, "Charting`Private`Tag$5931#1"]& ]}, {}},
+  AspectRatio->NCache[GoldenRatio^(-1), 0.6180339887498948],
+  Axes->{True, True},
+  AxesLabel->{None, None},
+  AxesOrigin->{10., 170.25276199702128`},
+  DisplayFunction->Identity,
+  Frame->{{True, True}, {True, True}},
+  FrameLabel->{{
+     FormBox["\"Stake Span\"", TraditionalForm], None}, {
+     FormBox["\"Tension\"", TraditionalForm], None}},
+  FrameTicks->{{Automatic, Automatic}, {Automatic, Automatic}},
+  GridLines->{None, None},
+  GridLinesStyle->Directive[
+    GrayLevel[0.5, 0.4]],
+  ImagePadding->All,
+  Method->{
+   "DefaultBoundaryStyle" -> Automatic, 
+    "DefaultGraphicsInteraction" -> {
+     "Version" -> 1.2, "TrackMousePosition" -> {True, False}, 
+      "Effects" -> {
+       "Highlight" -> {"ratio" -> 2}, "HighlightPoint" -> {"ratio" -> 2}, 
+        "Droplines" -> {
+         "freeformCursorMode" -> True, 
+          "placement" -> {"x" -> "All", "y" -> "None"}}}}, "DefaultMeshStyle" -> 
+    AbsolutePointSize[6], "ScalingFunctions" -> None, 
+    "CoordinatesToolOptions" -> {"DisplayFunction" -> ({
+        (Identity[#]& )[
+         Part[#, 1]], 
+        (Identity[#]& )[
+         Part[#, 2]]}& ), "CopiedValueFunction" -> ({
+        (Identity[#]& )[
+         Part[#, 1]], 
+        (Identity[#]& )[
+         Part[#, 2]]}& )}},
+  PlotLabel->FormBox[
+   "\"Left tension on shuttle off stake rail for varying stake spans\"", 
+    TraditionalForm],
+  PlotRange->{{10, 25}, {170.25276199702128`, 193.96795045345874`}},
+  PlotRangeClipping->True,
+  PlotRangePadding->{{
+     Scaled[0.02], 
+     Scaled[0.02]}, {
+     Scaled[0.05], 
+     Scaled[0.05]}},
+  Ticks->{Automatic, Automatic}]], "Output",
+ CellChangeTimes->{
+  3.871347034636408*^9, {3.8713477533048005`*^9, 3.8713477669359636`*^9}, 
+   3.871350687063116*^9, 3.8713507224891453`*^9},
+ CellLabel->"Out[11]=",ExpressionUUID->"b253353d-c6f9-43a3-aeb1-64cd38792c13"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"Plot", "[", 
+  RowBox[{
+   RowBox[{
+    RowBox[{"Torque", "[", 
+     RowBox[{
+      RowBox[{"109", " ", "*", " ", 
+       RowBox[{"Pi", " ", "/", " ", "180"}]}], ",", " ", "0.25", ",", " ", 
+      "0.2", ",", " ", "0.1542"}], "]"}], " ", "/.", " ", 
+    RowBox[{"{", 
+     RowBox[{
+      RowBox[{"g", " ", "\[Rule]", " ", "9.8"}], ",", " ", 
+      RowBox[{"m", " ", "\[Rule]", " ", ".35"}], ",", " ", 
+      RowBox[{"T", " ", "\[Rule]", " ", "endtension"}]}], "}"}]}], ",", " ", 
+   RowBox[{"{", 
+    RowBox[{
+     SubscriptBox["L", "cs"], ",", " ", "10", ",", " ", "25"}], "}"}], ",", 
+   " ", 
+   RowBox[{
+   "PlotLabel", "\[Rule]", " ", 
+    "\"\<Left torque on shuttle arm off stake rail for varying stake \
+spans\>\""}], ",", 
+   RowBox[{"Frame", "\[Rule]", " ", "True"}], ",", " ", " ", 
+   RowBox[{"FrameLabel", "\[Rule]", 
+    RowBox[{"{", 
+     RowBox[{"\"\<Left Torque\>\"", ",", "\"\<Stake Span\>\""}], "}"}]}]}], 
+  "]"}]], "Input",
+ CellChangeTimes->{{3.8713470723564415`*^9, 3.8713470749003267`*^9}, {
+  3.8713471077278557`*^9, 3.8713471208381085`*^9}, {3.871347763969181*^9, 
+  3.871347765630867*^9}, {3.8713507491229224`*^9, 3.871350774182948*^9}},
+ CellLabel->"In[13]:=",ExpressionUUID->"9012d368-80d5-4e64-88f2-9690eab14401"],
+
+Cell[BoxData[
+ GraphicsBox[{{{}, {}, 
+    TagBox[
+     {RGBColor[0.368417, 0.506779, 0.709798], AbsoluteThickness[1.6], Opacity[
+      1.], LineBox[CompressedData["
+1:eJwVzHs81Xccx/FzohN6RGk5cgmPjts5jnNx+0b0iTorJt/fqbRuQ9ocMt1U
+dGqp0XK6q6TERmctyyKn2VzKZ5EeTSollMkqzSVHZw9rkdt+++P9eD2e/7yd
+NmxWfj6Jw+GEs/u/G7IWm3E4AjhhZDPe76/Ej+ZKTNZOEoDprtuTt7C+rbPm
+lRsLYKCvTTo4T4luT95wE00FoFw1YhgmShzgZw23WgpAXX2Ib+qnxNS85z0l
+zgKwPPWzQeylxBOXd92JChMAZ8nxxJMiJdbcLEqvyRaA4Kk2qdpOiQHJoTZi
+f2dQrOj5e+E4g4a8TZ71j5wh1h86da8YTNOHvYtWuUBQ6V33JQ0MSupVrUVm
+rtB4Pto2qYxB65k8MqfQFY6Z73O9eIFBx95OHSjcIMNIPaA6yKDR65SXG7vd
+wO6VKqxzK4MOK7OOX9/rDi9jfN/XRjG4ZlnPqjJHISxP45hIwhm8X3Uzv/1X
+IVxjZm2vmc+gfcSKHN4yEXTkVOgSxQwe3uTyU+dbEfDuj8/Ot2dQPpoCXQc9
+IKLzk9enLRgcmmXyNlsohi4mt8qKy+C5lZE0rEEMMn0p0QxSTDZ1lopiPCHP
+5gdOSjfFJIVUVGEkAYuIL/YPPqNY8L5Kuy1XAt3TI5puP6A4bH3LTu8ghX3x
+1Q0edRSn383Agi1S+DhqfaOigmKILnNuf5UUVl+qw/QSiryXotNHp8nAIdlR
+t/Z7in+FmtfVrZYBfWTmHnSBok5BG/doZTCBmQmFp9i/b6Rdh9/JQBy6I1Wr
+oZjJZSqlC+VwI9XW6fgBilloke9xSg5XRAEa+90UD1l6ri16JYcKP+rstI1i
+bv6R1ipPL6gpdJxqSKAYuDkzxjnNCx4XdO+Mi6U4mlr/o+CeF6QwI8256yhe
+5sc2aq28QbI1/JBbJMWu4bwxdZw3/GLSvmZDBMX5VrP1PWXeoNni0RWylKJg
+l7yv2NgHAmObFK3BFN0tj1ziMT7gOYQZUwIp2sLi+S9yfeDWHF7LPj+KeWUX
+Oi31PuCq0DtclVEMiPIOfkZ8wTYmflDlQTGeJpQNaXyht5z7e4cLxfTmiZGz
+7b6wkHkxdsaJYnXWE+NGFz+w0YfuuGdH8eszS21Xp/jB3JLiy8inGPdozLC7
+zg8YayXXYyZFUjjjO3sLAgFvGxLumVM8V167jh9N4MbeeRNiM4r8yeVtl64Q
+KBaO/zYymeLzgqDAoWICPZuSQnpZa4PuFCy9SuCfh0P1LazlKW0J/aUElNlr
+mq+xXvbmw6isnEA6d4mJinVG0wKnG0jg7Lzdzc3GFAfz7sY/fkLAe3vNSIkR
+xUp/5X1BK4Hw2NqaPNZprc/kO9sIpNm3ZBxmbT6jf8S6nUCkxsU6jrUw3fzY
+Z38S2Lw/fuUc1jEJy8t6+wgkGgvlRydRdJvyh1VAPwH9Q4OVmvXAxY3qI3oC
+nz7FMRXrPR07FkkMBJwC1U2LWOfQnJbkdwRIScTJUS7FKL1jQP2/BKAi8mAf
+axdN0bf8IQL5CzbubWN9vbZSVfmBwLTYk1uvs1ZHhzROHSXgzJQmFbIOHmuQ
+rR8joF3f/OUJ1ibnV2RfHScQLBtL+or1A9+ODxMTBO4kC7clsv4P/Jk0GA==
+
+       "]]},
+     Annotation[#, "Charting`Private`Tag$7638#1"]& ]}, {}},
+  AspectRatio->NCache[GoldenRatio^(-1), 0.6180339887498948],
+  Axes->{True, True},
+  AxesLabel->{None, None},
+  AxesOrigin->{10., -63.52788452372852},
+  DisplayFunction->Identity,
+  Frame->{{True, True}, {True, True}},
+  FrameLabel->{{
+     FormBox["\"Stake Span\"", TraditionalForm], None}, {
+     FormBox["\"Left Torque\"", TraditionalForm], None}},
+  FrameTicks->{{Automatic, Automatic}, {Automatic, Automatic}},
+  GridLines->{None, None},
+  GridLinesStyle->Directive[
+    GrayLevel[0.5, 0.4]],
+  ImagePadding->All,
+  Method->{
+   "DefaultBoundaryStyle" -> Automatic, 
+    "DefaultGraphicsInteraction" -> {
+     "Version" -> 1.2, "TrackMousePosition" -> {True, False}, 
+      "Effects" -> {
+       "Highlight" -> {"ratio" -> 2}, "HighlightPoint" -> {"ratio" -> 2}, 
+        "Droplines" -> {
+         "freeformCursorMode" -> True, 
+          "placement" -> {"x" -> "All", "y" -> "None"}}}}, "DefaultMeshStyle" -> 
+    AbsolutePointSize[6], "ScalingFunctions" -> None, 
+    "CoordinatesToolOptions" -> {"DisplayFunction" -> ({
+        (Identity[#]& )[
+         Part[#, 1]], 
+        (Identity[#]& )[
+         Part[#, 2]]}& ), "CopiedValueFunction" -> ({
+        (Identity[#]& )[
+         Part[#, 1]], 
+        (Identity[#]& )[
+         Part[#, 2]]}& )}},
+  PlotLabel->FormBox[
+   "\"Left torque on shuttle arm off stake rail for varying stake spans\"", 
+    TraditionalForm],
+  PlotRange->{{10, 25}, {-72.92071487942144, -64.0222440161334}},
+  PlotRangeClipping->True,
+  PlotRangePadding->{{
+     Scaled[0.02], 
+     Scaled[0.02]}, {
+     Scaled[0.05], 
+     Scaled[0.05]}},
+  Ticks->{Automatic, Automatic}]], "Output",
+ CellChangeTimes->{
+  3.8713471214865303`*^9, 3.871347154609445*^9, {3.871347757016159*^9, 
+   3.871347772310884*^9}, {3.8713507648216696`*^9, 3.871350774638634*^9}},
+ CellLabel->"Out[13]=",ExpressionUUID->"ffc53070-922e-42a8-8a32-59e5de9826df"]
+}, Open  ]],
+
+Cell["\<\
+We can see that changing the stake spans will have negligible effect on the \
+amount of torque needed to be exerted to control arm positions\
+\>", "Text",
+ CellChangeTimes->{{3.8713477910393825`*^9, 
+  3.871347816582445*^9}},ExpressionUUID->"8f85ecd0-02d2-4596-b558-\
+84e020ae3ad7"]
+},
+WindowSize->{1440., 741.75},
+WindowMargins->{{Automatic, 1147.2}, {Automatic, -9.75}},
+FrontEndVersion->"12.2 for Microsoft Windows (64-bit) (December 12, 2020)",
+StyleDefinitions->"Default.nb",
+ExpressionUUID->"47ea1687-b8e7-4456-9bc7-ebeb534b6739"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[558, 20, 247, 4, 34, "Text",ExpressionUUID->"6dd8e97d-ff4d-4788-bd83-fd50c7173ff4"],
+Cell[CellGroupData[{
+Cell[830, 28, 2303, 61, 49, "Input",ExpressionUUID->"5c49b18a-bec2-45df-bb4a-f765e17afdf5"],
+Cell[3136, 91, 1381, 34, 51, "Output",ExpressionUUID->"aed0db9f-d4e7-4d3d-a413-cdbb9cf85a33"]
+}, Open  ]],
+Cell[4532, 128, 1457, 37, 47, "Input",ExpressionUUID->"8e1c04b2-6970-49be-ac77-b339d7458e72"],
+Cell[5992, 167, 704, 12, 56, "Text",ExpressionUUID->"6a895c53-d43e-433c-aa46-d5283b61c27b"],
+Cell[CellGroupData[{
+Cell[6721, 183, 869, 19, 28, "Input",ExpressionUUID->"4caf7b99-d2b0-4e0d-afa3-07cca132e12a"],
+Cell[7593, 204, 427, 7, 32, "Output",ExpressionUUID->"d759a844-3f6b-4fb4-ad09-d7cef7e11daf"]
+}, Open  ]],
+Cell[8035, 214, 848, 20, 104, "Input",ExpressionUUID->"1fff6d88-f1ce-4fc2-95f6-36b09f14c9ac"],
+Cell[CellGroupData[{
+Cell[8908, 238, 2305, 62, 57, "Input",ExpressionUUID->"c9b1566a-6d52-4c68-98f0-1756fb7effbc"],
+Cell[11216, 302, 1180, 30, 85, "Output",ExpressionUUID->"372f9ed3-0c38-4154-b44f-69e607e8d9de"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[12433, 337, 835, 20, 28, "Input",ExpressionUUID->"9961172e-6090-4a6f-9710-185eb2db47e8"],
+Cell[13271, 359, 3716, 81, 267, "Output",ExpressionUUID->"b253353d-c6f9-43a3-aeb1-64cd38792c13"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[17024, 445, 1267, 30, 47, "Input",ExpressionUUID->"9012d368-80d5-4e64-88f2-9690eab14401"],
+Cell[18294, 477, 3754, 82, 287, "Output",ExpressionUUID->"ffc53070-922e-42a8-8a32-59e5de9826df"]
+}, Open  ]],
+Cell[22063, 562, 292, 6, 34, "Text",ExpressionUUID->"8f85ecd0-02d2-4596-b558-84e020ae3ad7"]
+}
+]
+*)
+
